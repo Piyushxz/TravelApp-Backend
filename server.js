@@ -2,6 +2,8 @@ const express = require("express")
 const PORT = 3500;
 const app = express();
 
+const cors = require('cors')
+
 
 const mongoose = require("mongoose")
 const connectDB = require('./config/dbconfig');
@@ -15,7 +17,7 @@ const authRouter = require("./routes/auth.router")
 const wishlistRouter = require("./routes/wishlist.router")
 
 app.use(express.json())
-
+app.use(cors());
 connectDB();
 
 app.get("/",(req,res)=>{
