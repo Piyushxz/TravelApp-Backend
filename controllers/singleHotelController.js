@@ -1,3 +1,5 @@
+
+const Hotel = require("../model/hotel.model")
 const singleHotelHandler = async (req,res)=>{
     try{
         const {id} = req.params

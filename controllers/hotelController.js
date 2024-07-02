@@ -12,6 +12,6 @@ const getAllHotelHandler = async (req, res) => {
     }catch(err){
         console.log(err)
     }
-}
+}  
 
 module.exports = getAllHotelHandler;
