@@ -1,24 +1,18 @@
 const User = require("../model/user.model");
 const CryptoJS = require('crypto-js');
 const signupHandler = async (req, res) => {
-    try {
-        const user = await User.findOne({ number: req.body.number });
-        if (!user) {
-            return res.status(401).json({ message: "Invalid Mobile Number" });
-        }
-
-        const decodedPassword = CryptoJS.AES.decrypt(user.password, process.env.PASSWORD_SECRET_KEY).toString(CryptoJS.enc.Utf8);
-        if (decodedPassword !== req.body.password) {
-            return res.status(401).json({ message: "Incorrect Password" });
-        }
-
-        const { password, ...rest } = user._doc;
-        const accessToken = jwt.sign({ username: user.username }, process.env.ACCESS_TOKEN); // Use correct token secret
-        console.log(accessToken)
-        res.json({ ...rest, accessToken }); // Send both user data and accessToken
-    } catch (err) {
+    try{
+        const newUser = new User({
+            username: req.body.username,
+            number: req.body.number,
+            email: req.body.email,
+            password: CryptoJS.AES.encrypt(req.body.password, process.env.PASSWORD_SECRET_KEY).toString()
+        });
+        const savedUser = await newUser.save();
+        res.status(201).json(savedUser);
+    }catch(err){
         console.log(err);
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).json({ message: "Error creating a user" })
     }
 }
 
